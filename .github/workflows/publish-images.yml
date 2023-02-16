@@ -28,7 +28,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./projet/Dockerfile.jobs-api
+          context: ./projet
+          file: Dockerfile.jobs-api
           push: true
           tags: ${{ steps.meta-jobs.outputs.tags }}
           labels: ${{ steps.meta-jobs.outputs.labels }}
@@ -42,7 +43,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./projet/Dockerfile.applicants-api
+          context: ./projet
+          file: Dockerfile.applicants-api
           push: true
           tags: ${{ steps.meta-applicants.outputs.tags }}
           labels: ${{ steps.meta-applicants.outputs.labels }}
@@ -56,7 +58,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./projet/Dockerfile.identity-api
+          context: ./projet
+          file: Dockerfile.identity-api
           push: true
           tags: ${{ steps.meta-identity.outputs.tags }}
           labels: ${{ steps.meta-identity.outputs.labels }}
