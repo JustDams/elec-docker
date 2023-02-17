@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 
 services:
   user.data:
@@ -12,11 +12,21 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     restart: always
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     ports:
       - 5672:5672
       - 15672:15672
     networks:
       - rabbitmq_net
+    depends_on:
+      sql.data:
+        condition: service_started
+      user.data:
+        condition: service_started
 
   sql.data:
     build:
@@ -42,8 +52,8 @@ services:
       - rabbitmq_net
       - sql_data
     depends_on:
-      - rabbitmq
-      - sql.data
+      rabbitmq:
+        condition: service_healthy
     environment:
       - ConnectionString=Server=sql.data;User=sa;Password=Pass@word;Database=dotnetgigs.applicants;
       - HostRabbitmq=rabbitmq
@@ -59,8 +69,8 @@ services:
       - sql_data
       - web
     depends_on:
-      - rabbitmq
-      - sql.data
+      rabbitmq:
+        condition: service_healthy
     environment:
       - ConnectionString=Server=sql.data;User=sa;Password=Pass@word;Database=dotnetgigs.jobs;
       - HostRabbitmq=rabbitmq
@@ -77,9 +87,10 @@ services:
       - sql_data
       - web
     depends_on:
-      - user.data
-      - rabbitmq
-      - sql.data
+      rabbitmq:
+        condition: service_healthy
+      user.data:
+        condition: service_started
     environment:
       - RedisHost=user.data:6379
       - HostRabbitmq=rabbitmq
