@@ -89,7 +89,7 @@ Il doit pouvoir communiquer avec l'host et les services rabbimq et redis.
 
 ### web
 Service basé sur l'image créée plustôt. Expose son port 80 sur le 80 (ou 8080) de l'host.
-Il n'a pas de communication direct avec les autres conteneurs. Mais ceux-ci doivent être en exécution obligatoirement.
+Il n'a pas de communication direct avec les autres conteneurs sauf les 3 api. Mais ceux-ci doivent être en exécution obligatoirement.
 
 # Groupes et fonctionnement
 
